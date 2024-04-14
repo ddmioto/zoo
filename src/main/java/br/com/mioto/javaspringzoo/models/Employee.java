@@ -5,6 +5,7 @@ import java.util.List;
 public class Employee {
   private String name;
   private String cpf;
+  private User user;
   private List<Address> address;
   private Double salary;
 
@@ -22,6 +23,14 @@ public class Employee {
 
   public void setCpf(String cpf) {
     this.cpf = cpf;
+  }
+
+  public User getUser() {
+    return this.user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public List<Address> getAddress() {
