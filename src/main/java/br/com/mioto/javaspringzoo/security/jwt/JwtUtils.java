@@ -18,14 +18,12 @@ public class JwtUtils {
   private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
   private static final long EXPIRATION_TIME = 864_000_000; // 10 dias em milissegundos
 
-  // public static String generateJwtToken(Authentication authentication) {
-  public static String generateJwtToken(String email) {
+  public static String generateJwtToken(Authentication authentication) {
 
-    // UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+    UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
     return Jwts.builder()
-        // .setSubject(userPrincipal.getUsername())
-        .setSubject(email)
+        .setSubject(userPrincipal.getUsername())
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
         .signWith(SECRET_KEY, SignatureAlgorithm.HS512)

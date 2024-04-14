@@ -37,12 +37,10 @@ public class AuthController {
       // .authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(),
       // loginReq.getPassword()));
 
-      // String email = authentication.getName();
-      // String token = JwtUtils.generateJwtToken(authentication);
+      Authentication authentication = FakeAuthentication.generateFakeAuthentication(loginReq.getEmail(), "ROLE_USER");
 
-      String email = loginReq.getEmail(); // Usando o email do LoginRequest
-      String token = JwtUtils.generateJwtToken(email);
-
+      String email = authentication.getName();
+      String token = JwtUtils.generateJwtToken(authentication);
       LoginResponse loginRes = new LoginResponse(email, token);
 
       return ResponseEntity.ok(loginRes);

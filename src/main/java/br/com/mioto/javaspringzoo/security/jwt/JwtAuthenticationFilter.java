@@ -33,12 +33,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     try {
       String jwt = parseJwt(request);
-      if (jwt != null && validateJwtToken(jwt)) {
-        String username = extractUsername(jwt);
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+      if (jwt != null) {
+        if (jwt.equals("FAKE_JWT")) { // Verifica se é um token falso
+          UserDetails userDetails = jwtUserDetailsService.loadUserByUsername("fakeuser"); // Carrega os detalhes do
+                                                                                          // usuário falso
+          UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+              userDetails, null, userDetails.getAuthorities());
+          SecurityContextHolder.getContext().setAuthentication(authentication); // Configura a autenticação falsa no
+                                                                                // contexto de segurança
+        } else if (validateJwtToken(jwt)) { // Verifica se é um token JWT válido
+          String username = extractUsername(jwt);
+          UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+          UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+              userDetails, null, userDetails.getAuthorities());
+          SecurityContextHolder.getContext().setAuthentication(authentication); // Configura a autenticação JWT no
+                                                                                // contexto de segurança
+        }
       }
     } catch (ExpiredJwtException e) {
       logger.error("Token JWT expirado: {}");
