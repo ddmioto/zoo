@@ -1,12 +1,16 @@
 package br.com.mioto.javaspringzoo.repositories;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import br.com.mioto.javaspringzoo.models.User;
 
 @Repository
-public class UserRepository {
-  public User findUserByEmail(String email) {
-    User user = new User(email, "123456");
-    return user;
-  }
+public interface UserRepository extends JpaRepository<User, Long> {
+  Optional<User> findByUsername(String username);
+
+  Boolean existsByUsername(String username);
+
+  Boolean existsByEmail(String email);
 }

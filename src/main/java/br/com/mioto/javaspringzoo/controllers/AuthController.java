@@ -1,56 +1,120 @@
 package br.com.mioto.javaspringzoo.controllers;
 
-import org.springframework.http.HttpStatus;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import br.com.mioto.javaspringzoo.models.ERole;
+import br.com.mioto.javaspringzoo.models.Role;
 import br.com.mioto.javaspringzoo.models.User;
-import br.com.mioto.javaspringzoo.models.request.LoginRequest;
-import br.com.mioto.javaspringzoo.models.response.ErrorResponse;
-import br.com.mioto.javaspringzoo.models.response.LoginResponse;
+import br.com.mioto.javaspringzoo.payload.request.LoginRequest;
+import br.com.mioto.javaspringzoo.payload.request.SignupRequest;
+import br.com.mioto.javaspringzoo.payload.response.JwtResponse;
+import br.com.mioto.javaspringzoo.payload.response.MessageResponse;
+import br.com.mioto.javaspringzoo.repositories.RoleRepository;
+import br.com.mioto.javaspringzoo.repositories.UserRepository;
 import br.com.mioto.javaspringzoo.security.jwt.JwtUtils;
+import br.com.mioto.javaspringzoo.security.services.UserDetailsImpl;
 
-@Controller
-@RequestMapping("/rest/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/api/auth")
 public class AuthController {
+  @Autowired
+  AuthenticationManager authenticationManager;
 
-  private final AuthenticationManager authenticationManager;
+  @Autowired
+  UserRepository userRepository;
 
-  private JwtUtils jwtUtil;
+  @Autowired
+  RoleRepository roleRepository;
 
-  public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtil) {
-    this.authenticationManager = authenticationManager;
-    this.jwtUtil = jwtUtil;
+  @Autowired
+  PasswordEncoder encoder;
+
+  @Autowired
+  JwtUtils jwtUtils;
+
+  @PostMapping("/signin")
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+        .collect(Collectors.toList());
+
+    return ResponseEntity
+        .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
   }
 
-  @ResponseBody
-  @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public ResponseEntity login(@RequestBody LoginRequest loginReq) {
-
-    try {
-      // Authentication authentication = authenticationManager
-      // .authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(),
-      // loginReq.getPassword()));
-
-      Authentication authentication = FakeAuthentication.generateFakeAuthentication(loginReq.getEmail(), "ROLE_USER");
-
-      String email = authentication.getName();
-      String token = JwtUtils.generateJwtToken(authentication);
-      LoginResponse loginRes = new LoginResponse(email, token);
-
-      return ResponseEntity.ok(loginRes);
-
-    } catch (BadCredentialsException e) {
-      ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Invalid username or password");
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    } catch (Exception e) {
-      ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  @PostMapping("/signup")
+  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
+
+    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+    }
+
+    // Create new user's account
+    User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+        encoder.encode(signUpRequest.getPassword()));
+
+    Set<String> strRoles = signUpRequest.getRole();
+    Set<Role> roles = new HashSet<>();
+
+    if (strRoles == null) {
+      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+      roles.add(userRole);
+    } else {
+      strRoles.forEach(role -> {
+        switch (role) {
+          case "admin":
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(adminRole);
+
+            break;
+          case "mod":
+            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(modRole);
+
+            break;
+          default:
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        }
+      });
+    }
+
+    user.setRoles(roles);
+    userRepository.save(user);
+
+    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
 }
