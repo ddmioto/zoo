@@ -1,15 +1,15 @@
 import './Home.css';
 
-function Home() {
+function AnimalsSearch() {
     return (
         <div className="Home">
             <p style={{
                 color:"red",
                 fontSize:40
-            }}>Hello   </p>
+            }}>Hello mamasita  </p>
         </div>
     );
 }
   
-export default Home;
+export default AnimalsSearch;
   
