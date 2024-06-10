@@ -1,13 +1,40 @@
 package br.com.mioto.javaspringzoo.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+@Embeddable
 class Taxonomy {
-  private String kingdom;
-  private String phylum;
-  private String classe;
-  private String order;
-  private String family;
-  private String genus;
-  private String scientificName;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "kingdom")
+    private String kingdom;
+
+    @Column(name = "phylum")
+    private String phylum;
+
+    @Column(name = "class")
+    private String classe;
+
+    @Column(name = "order_name")
+    private String order;
+
+    @Column(name = "family")
+    private String family;
+
+    @Column(name = "genus")
+    private String genus;
+
+    @Column(name = "scientific_name")
+    private String scientificName;
 
   public String getKingdom() {
       return kingdom;

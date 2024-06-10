@@ -1,29 +1,88 @@
 package br.com.mioto.javaspringzoo.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+@Embeddable
 class Characteristics {
-  private String prey;
-  private String nameOfYoung;
-  private String groupBehavior;
-  private String biggestThreat;
-  private String mostDistinctiveFeature;
-  private String gestationPeriod;
-  private String litterSize;
-  private String habitat;
-  private String diet;
-  private String type;
-  private String commonName;
-  private String origin;
-  private String numberOfSpecies;
-  private String location;
-  private String color;
-  private String skinType;
-  private String topSpeed;
-  private String lifespan;
-  private String weight;
-  private String height;
-  private String length;
-  private String ageOfSexualMaturity;
-  private String ageOfWeaning;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "prey")
+        private String prey;
+
+    @Column(name = "name_of_young")
+    private String nameOfYoung;
+
+    @Column(name = "group_behavior")
+    private String groupBehavior;
+
+    @Column(name = "biggest_threat")
+    private String biggestThreat;
+
+    @Column(name = "most_distinctive_feature")
+    private String mostDistinctiveFeature;
+
+    @Column(name = "gestation_period")
+    private String gestationPeriod;
+
+    @Column(name = "litter_size")
+    private String litterSize;
+
+    @Column(name = "habitat")
+    private String habitat;
+
+    @Column(name = "diet")
+    private String diet;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "common_name")
+    private String commonName;
+
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "number_of_species")
+    private String numberOfSpecies;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "skin_type")
+    private String skinType;
+
+    @Column(name = "top_speed")
+    private String topSpeed;
+
+    @Column(name = "lifespan")
+    private String lifespan;
+
+    @Column(name = "weight")
+    private String weight;
+
+    @Column(name = "height")
+    private String height;
+
+    @Column(name = "length")
+    private String length;
+
+    @Column(name = "age_of_sexual_maturity")
+    private String ageOfSexualMaturity;
+
+    @Column(name = "age_of_weaning")
+    private String ageOfWeaning;
 
   // Getters and setters
   public String getPrey() {
