@@ -3,6 +3,10 @@ package br.com.mioto.javaspringzoo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,14 +33,27 @@ public class AnimalsController {
     private JwtUtils jwtUtils;
 
     @GetMapping("/all")
-    public ResponseEntity<?> allAnimals() {
+    public ResponseEntity<?> allAnimals(int page, int size, String sortBy, String direction) {
         // Obtém o token JWT da solicitação
         String jwtToken = extractJwtTokenFromRequest();
 
         // Valida o token JWT
         if (jwtUtils.validateJwtToken(jwtToken)) {
-            Iterable<Animal> animals = animalRepository.findAll();
-            return ResponseEntity.ok(animals);
+            try {
+                // Configuração da paginação e ordenação
+                Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), sortBy);
+                Page<Animal> animalsPage = animalRepository.findAll(pageable);
+
+                // Verifica se a página solicitada está dentro do intervalo
+                if (page >= animalsPage.getTotalPages()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page not found");
+                }
+
+                // Retorna a página de animais
+                return ResponseEntity.ok(animalsPage);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid sorting direction or field");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid JWT Token. Access Denied!");
         }

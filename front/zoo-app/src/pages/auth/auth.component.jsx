@@ -1,3 +1,5 @@
+// src/pages/auth/auth.component.jsx (ou .js)
+
 import React, { useState } from 'react';
 import {
   MDBContainer,
@@ -6,28 +8,24 @@ import {
   MDBInput,
   MDBBtn
 } from 'mdb-react-ui-kit';
-import AuthService from './services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import authService from './services/auth.service';
 
 function Auth({ onLoginSuccess }) {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const service = new AuthService();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    onLoginSuccess(); //TODO Remover
-    navigate('/zoo');// TODO Remover
-
     setLoading(true);
     setError('');
     try {
-      const response = await service.login(email, password);
+      const response = await authService.login(username, password);
       console.log('Login successful:', response);
-      // Redirecionar ou realizar outras ações após login bem-sucedido
-      onLoginSuccess(); //
+      onLoginSuccess(); // Chama a função de sucesso após o login
+      navigate('/zoo'); // Redireciona para a página desejada após o login
     } catch (error) {
       setError(error.message);
     } finally {
@@ -48,16 +46,16 @@ function Auth({ onLoginSuccess }) {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <MDBInput 
               wrapperClass='mb-4' 
-              label='Email address' 
-              id='form1' 
-              type='email' 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              label='Username' 
+              id='username' 
+              type='text' 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <MDBInput 
               wrapperClass='mb-4' 
               label='Password' 
-              id='form2' 
+              id='password' 
               type='password' 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -68,7 +66,7 @@ function Auth({ onLoginSuccess }) {
           </div>
         </MDBCol>
         <MDBCol sm='6' className='d-none d-sm-block px-0'>
-          <img src="/assets/zoboo.jpg" style={{width: '80%', height: 'auto', objectFit: 'cover', objectPosition: 'left'}} />
+          <img src="/assets/zoboo.jpg" style={{width: '80%', height: 'auto', objectFit: 'cover', objectPosition: 'left'}} alt="zoboo" />
         </MDBCol>
       </MDBRow>
     </MDBContainer>
