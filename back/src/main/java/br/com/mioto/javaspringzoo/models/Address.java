@@ -1,41 +1,68 @@
 package br.com.mioto.javaspringzoo.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Address {
-  private String street;
-  private Integer number;
-  private String cep;
-  private String city;
 
-  public String getStreet() {
-    return this.street;
-  }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  public void setStreet(String street) {
-    this.street = street;
-  }
+    @Column(name = "street")
+    private String street;
 
-  public Integer getNumber() {
-    return this.number;
-  }
+    @Column(name = "number")
+    private Integer number;
 
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
+    @Column(name = "cep")
+    private String cep;
 
-  public String getCep() {
-    return this.cep;
-  }
+    @Column(name = "city")
+    private String city;
 
-  public void setCep(String cep) {
-    this.cep = cep;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getCity() {
-    return this.city;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setCity(String city) {
-    this.city = city;
-  }
+    public String getStreet() {
+        return this.street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public Integer getNumber() {
+        return this.number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public String getCep() {
+        return this.cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
 }

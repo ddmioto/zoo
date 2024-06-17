@@ -1,14 +1,14 @@
 package br.com.mioto.javaspringzoo.models;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Embeddable
+@Table(name = "characteristics")
 class Characteristics {
 
     @Id
@@ -16,7 +16,7 @@ class Characteristics {
     private Long id;
 
     @Column(name = "prey")
-        private String prey;
+    private String prey;
 
     @Column(name = "name_of_young")
     private String nameOfYoung;
@@ -85,187 +85,196 @@ class Characteristics {
     private String ageOfWeaning;
 
   // Getters and setters
-  public String getPrey() {
-      return prey;
-  }
 
-  public void setPrey(String prey) {
-      this.prey = prey;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getNameOfYoung() {
-      return nameOfYoung;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setNameOfYoung(String nameOfYoung) {
-      this.nameOfYoung = nameOfYoung;
-  }
+    public String getPrey() {
+        return prey;
+    }
 
-  public String getGroupBehavior() {
-      return groupBehavior;
-  }
+    public void setPrey(String prey) {
+        this.prey = prey;
+    }
 
-  public void setGroupBehavior(String groupBehavior) {
-      this.groupBehavior = groupBehavior;
-  }
+    public String getNameOfYoung() {
+        return nameOfYoung;
+    }
 
-  public String getBiggestThreat() {
-      return biggestThreat;
-  }
+    public void setNameOfYoung(String nameOfYoung) {
+        this.nameOfYoung = nameOfYoung;
+    }
 
-  public void setBiggestThreat(String biggestThreat) {
-      this.biggestThreat = biggestThreat;
-  }
+    public String getGroupBehavior() {
+        return groupBehavior;
+    }
 
-  public String getMostDistinctiveFeature() {
-      return mostDistinctiveFeature;
-  }
+    public void setGroupBehavior(String groupBehavior) {
+        this.groupBehavior = groupBehavior;
+    }
 
-  public void setMostDistinctiveFeature(String mostDistinctiveFeature) {
-      this.mostDistinctiveFeature = mostDistinctiveFeature;
-  }
+    public String getBiggestThreat() {
+        return biggestThreat;
+    }
 
-  public String getGestationPeriod() {
-      return gestationPeriod;
-  }
+    public void setBiggestThreat(String biggestThreat) {
+        this.biggestThreat = biggestThreat;
+    }
 
-  public void setGestationPeriod(String gestationPeriod) {
-      this.gestationPeriod = gestationPeriod;
-  }
+    public String getMostDistinctiveFeature() {
+        return mostDistinctiveFeature;
+    }
 
-  public String getLitterSize() {
-      return litterSize;
-  }
+    public void setMostDistinctiveFeature(String mostDistinctiveFeature) {
+        this.mostDistinctiveFeature = mostDistinctiveFeature;
+    }
 
-  public void setLitterSize(String litterSize) {
-      this.litterSize = litterSize;
-  }
+    public String getGestationPeriod() {
+        return gestationPeriod;
+    }
 
-  public String getHabitat() {
-      return habitat;
-  }
+    public void setGestationPeriod(String gestationPeriod) {
+        this.gestationPeriod = gestationPeriod;
+    }
 
-  public void setHabitat(String habitat) {
-      this.habitat = habitat;
-  }
+    public String getLitterSize() {
+        return litterSize;
+    }
 
-  public String getDiet() {
-      return diet;
-  }
+    public void setLitterSize(String litterSize) {
+        this.litterSize = litterSize;
+    }
 
-  public void setDiet(String diet) {
-      this.diet = diet;
-  }
+    public String getHabitat() {
+        return habitat;
+    }
 
-  public String getType() {
-      return type;
-  }
+    public void setHabitat(String habitat) {
+        this.habitat = habitat;
+    }
 
-  public void setType(String type) {
-      this.type = type;
-  }
+    public String getDiet() {
+        return diet;
+    }
 
-  public String getCommonName() {
-      return commonName;
-  }
+    public void setDiet(String diet) {
+        this.diet = diet;
+    }
 
-  public void setCommonName(String commonName) {
-      this.commonName = commonName;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public String getOrigin() {
-      return origin;
-  }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-  public void setOrigin(String origin) {
-      this.origin = origin;
-  }
+    public String getCommonName() {
+        return commonName;
+    }
 
-  public String getNumberOfSpecies() {
-      return numberOfSpecies;
-  }
+    public void setCommonName(String commonName) {
+        this.commonName = commonName;
+    }
 
-  public void setNumberOfSpecies(String numberOfSpecies) {
-      this.numberOfSpecies = numberOfSpecies;
-  }
+    public String getOrigin() {
+        return origin;
+    }
 
-  public String getLocation() {
-      return location;
-  }
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 
-  public void setLocation(String location) {
-      this.location = location;
-  }
+    public String getNumberOfSpecies() {
+        return numberOfSpecies;
+    }
 
-  public String getColor() {
-      return color;
-  }
+    public void setNumberOfSpecies(String numberOfSpecies) {
+        this.numberOfSpecies = numberOfSpecies;
+    }
 
-  public void setColor(String color) {
-      this.color = color;
-  }
+    public String getLocation() {
+        return location;
+    }
 
-  public String getSkinType() {
-      return skinType;
-  }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-  public void setSkinType(String skinType) {
-      this.skinType = skinType;
-  }
+    public String getColor() {
+        return color;
+    }
 
-  public String getTopSpeed() {
-      return topSpeed;
-  }
+    public void setColor(String color) {
+        this.color = color;
+    }
 
-  public void setTopSpeed(String topSpeed) {
-      this.topSpeed = topSpeed;
-  }
+    public String getSkinType() {
+        return skinType;
+    }
 
-  public String getLifespan() {
-      return lifespan;
-  }
+    public void setSkinType(String skinType) {
+        this.skinType = skinType;
+    }
 
-  public void setLifespan(String lifespan) {
-      this.lifespan = lifespan;
-  }
+    public String getTopSpeed() {
+        return topSpeed;
+    }
 
-  public String getWeight() {
-      return weight;
-  }
+    public void setTopSpeed(String topSpeed) {
+        this.topSpeed = topSpeed;
+    }
 
-  public void setWeight(String weight) {
-      this.weight = weight;
-  }
+    public String getLifespan() {
+        return lifespan;
+    }
 
-  public String getHeight() {
-      return height;
-  }
+    public void setLifespan(String lifespan) {
+        this.lifespan = lifespan;
+    }
 
-  public void setHeight(String height) {
-      this.height = height;
-  }
+    public String getWeight() {
+        return weight;
+    }
 
-  public String getLength() {
-      return length;
-  }
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
 
-  public void setLength(String length) {
-      this.length = length;
-  }
+    public String getHeight() {
+        return height;
+    }
 
-  public String getAgeOfSexualMaturity() {
-      return ageOfSexualMaturity;
-  }
+    public void setHeight(String height) {
+        this.height = height;
+    }
 
-  public void setAgeOfSexualMaturity(String ageOfSexualMaturity) {
-      this.ageOfSexualMaturity = ageOfSexualMaturity;
-  }
+    public String getLength() {
+        return length;
+    }
 
-  public String getAgeOfWeaning() {
-      return ageOfWeaning;
-  }
+    public void setLength(String length) {
+        this.length = length;
+    }
 
-  public void setAgeOfWeaning(String ageOfWeaning) {
-      this.ageOfWeaning = ageOfWeaning;
-  }
+    public String getAgeOfSexualMaturity() {
+        return ageOfSexualMaturity;
+    }
+
+    public void setAgeOfSexualMaturity(String ageOfSexualMaturity) {
+        this.ageOfSexualMaturity = ageOfSexualMaturity;
+    }
+
+    public String getAgeOfWeaning() {
+        return ageOfWeaning;
+    }
+
+    public void setAgeOfWeaning(String ageOfWeaning) {
+        this.ageOfWeaning = ageOfWeaning;
+    }
 }

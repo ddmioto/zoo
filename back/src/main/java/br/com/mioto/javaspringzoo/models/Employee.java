@@ -1,52 +1,84 @@
 package br.com.mioto.javaspringzoo.models;
 
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
+@Entity
 public class Employee {
-  private String name;
-  private String cpf;
-  private User user;
-  private List<Address> address;
-  private Double salary;
 
-  public String getName() {
-    return this.name;
-  }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	@Column(nullable = false)
+    private String name;
 
-  public String getCpf() {
-    return this.cpf;
-  }
+    @Column(name = "cpf")
+    private String cpf;
 
-  public void setCpf(String cpf) {
-    this.cpf = cpf;
-  }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-  public User getUser() {
-    return this.user;
-  }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    @Column(name = "salary")
+    private Double salary;
 
-  public List<Address> getAddress() {
-    return this.address;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setAddress(List<Address> address) {
-    this.address = address;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public Double getSalary() {
-    return this.salary;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public void setSalary(Double salary) {
-    this.salary = salary;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCpf() {
+        return this.cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Address getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Double getSalary() {
+        return this.salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
 
 }

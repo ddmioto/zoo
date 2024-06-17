@@ -1,14 +1,12 @@
 package br.com.mioto.javaspringzoo.models;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-@Embeddable
 class Taxonomy {
 
     @Id
@@ -36,59 +34,67 @@ class Taxonomy {
     @Column(name = "scientific_name")
     private String scientificName;
 
-  public String getKingdom() {
-      return kingdom;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setKingdom(String kingdom) {
-      this.kingdom = kingdom;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getPhylum() {
-      return phylum;
-  }
+    public String getKingdom() {
+        return kingdom;
+    }
 
-  public void setPhylum(String phylum) {
-      this.phylum = phylum;
-  }
+    public void setKingdom(String kingdom) {
+        this.kingdom = kingdom;
+    }
 
-  public String getClasse() {
-      return classe;
-  }
+    public String getPhylum() {
+        return phylum;
+    }
 
-  public void setClasse(String classe) {
-      this.classe = classe;
-  }
+    public void setPhylum(String phylum) {
+        this.phylum = phylum;
+    }
 
-  public String getOrder() {
-      return order;
-  }
+    public String getClasse() {
+        return classe;
+    }
 
-  public void setOrder(String order) {
-      this.order = order;
-  }
+    public void setClasse(String classe) {
+        this.classe = classe;
+    }
 
-  public String getFamily() {
-      return family;
-  }
+    public String getOrder() {
+        return order;
+    }
 
-  public void setFamily(String family) {
-      this.family = family;
-  }
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
-  public String getGenus() {
-      return genus;
-  }
+    public String getFamily() {
+        return family;
+    }
 
-  public void setGenus(String genus) {
-      this.genus = genus;
-  }
+    public void setFamily(String family) {
+        this.family = family;
+    }
 
-  public String getScientificName() {
-      return scientificName;
-  }
+    public String getGenus() {
+        return genus;
+    }
 
-  public void setScientificName(String scientificName) {
-      this.scientificName = scientificName;
-  }
+    public void setGenus(String genus) {
+        this.genus = genus;
+    }
+
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
 }

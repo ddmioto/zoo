@@ -2,42 +2,72 @@ package br.com.mioto.javaspringzoo.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "zoo")
 public class Zoo {
-  private String name;
-  private String cnpj;
-  private Address address;
-  private List<Animal> animals;
 
-  // Getters and setters
-  public String getName() {
-      return name;
-  }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+    private String name;
+	private String cnpj;
 
-  public void setName(String name) {
-      this.name = name;
-  }
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	private Address address;
 
-  public String getCnpj() {
-      return cnpj;
-  }
+	@OneToMany
+	@JoinColumn(name = "animals_id", referencedColumnName = "id")
+	private List<Animal> animals;
 
-  public void setCnpj(String cnpj) {
-      this.cnpj = cnpj;
-  }
+	// Getters and setters
+	public Long getId() {
+        return id;
+    }
 
-  public Address getAddress() {
-    return address;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setAddress(Address address) {
-    this.address = address;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public List<Animal> getAnimals() {
-      return animals;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public void setAnimals(List<Animal> animals) {
-      this.animals = animals;
-  }
+	public String getCnpj() {
+		return cnpj;
+	}
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public List<Animal> getAnimals() {
+		return animals;
+	}
+
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
+	}
 }
