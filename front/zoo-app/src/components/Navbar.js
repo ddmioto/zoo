@@ -6,23 +6,34 @@ import authService from '../pages/auth/services/auth.service';
 const MyNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isAdminOrModerator, setIsAdminOrModerator] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = authService.getCurrentUser();
     if (user) {
       setIsLoggedIn(true);
-      setUserName(user.username); // Mostrar o nome do usuário
+      setUserName(user.username);
+
+      const roles = user.roles; 
+      console.log(roles);
+      if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_MODERATOR')) {
+        setIsAdminOrModerator(true);
+      } else {
+        setIsAdminOrModerator(false);
+      }
     } else {
       setIsLoggedIn(false);
       setUserName('');
+      setIsAdminOrModerator(false);
     }
   }, []);
 
   const handleLogout = () => {
     authService.logout();
     setIsLoggedIn(false);
-    navigate('/');  // Redirecionar para a página inicial após o logout
+    setIsAdminOrModerator(false); 
+    navigate('/');
   };
 
   const handleLogin = () => {
@@ -40,6 +51,7 @@ const MyNavbar = () => {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/zoo">Zoológicos</Nav.Link>
             <Nav.Link as={Link} to="/animais">Animais</Nav.Link>
+            {isAdminOrModerator && <Nav.Link as={Link} to="/admin" style={{ color: 'red' }}>Admin</Nav.Link>}
             {/* <Nav.Link as={Link} to="/contact">Contato</Nav.Link> */}
           </Nav>
           <Nav className="ms-auto">

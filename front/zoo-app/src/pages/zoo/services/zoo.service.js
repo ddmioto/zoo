@@ -5,7 +5,6 @@ const API_URL = 'http://localhost:8080/zoo';
 class ZooService {
   async fetchZoosFromAPI(token) {
     try {
-      console.log(token);
       const response = await axios.get(`${API_URL}/all`, {
         headers: {
           Authorization: `Bearer ${token}`
