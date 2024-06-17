@@ -6,15 +6,29 @@ import {
   MDBListGroup,
   MDBListGroupItem
 } from 'mdb-react-ui-kit';
-import zooService from './services/zoo.service';
+import ZooService from './services/zoo.service';
+import authService from '../auth/services/auth.service';
 
 function Zoo() {
   const [zoos, setZoos] = useState([]);
   const [selectedZoo, setSelectedZoo] = useState(null);
 
   useEffect(() => {
-    const zoosData = zooService.fetchZoosFromLocalStorage();
-    setZoos(Array.isArray(zoosData) ? zoosData : []);
+    const fetchZoos = async () => {
+      try {
+        const currentUser = authService.getCurrentUser();
+        if (currentUser && currentUser.accessToken) {
+          const zoosData = await ZooService.fetchZoosFromAPI(currentUser.accessToken);
+          setZoos(zoosData);
+        } else {
+          console.error('Token JWT não encontrado.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar zoos:', error.message);
+      }
+    };
+
+    fetchZoos();
   }, []);
 
   const handleZooSelect = (zooId) => {
@@ -46,7 +60,7 @@ function Zoo() {
                 {zoos.find(zoo => zoo.id === selectedZoo).animals.length > 0 ? (
                   <ul>
                     {zoos.find(zoo => zoo.id === selectedZoo).animals.map((animal, index) => (
-                      <li key={index}>{animal}</li>
+                      <li key={index}>{typeof animal === 'object' ? animal.name : animal}</li>
                     ))}
                   </ul>
                 ) : (
