@@ -7,13 +7,13 @@ https://localhost:8080/api
 
 ## Endpoints
 
-POST /auth/signup
-POST /auth/signin
-POST /zoo/add
-GET  /zoo/all
-GET  /animal/{name}
-GET  /animals/all?page=0&size=10&sortBy=name&direction=ASC
-POST /animals/add
+POST /auth/signup<br>
+POST /auth/signin<br>
+POST /zoo/add<br>
+GET  /zoo/all<br>
+GET  /animal/{name}<br>
+GET  /animals/all?page=0&size=10&sortBy=name&direction=ASC<br>
+POST /animals/add<br>
 
 
 
