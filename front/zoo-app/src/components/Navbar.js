@@ -3,10 +3,10 @@ import { Navbar, Nav, Container, Image } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '../pages/auth/services/auth.service';
 
-const MyNavbar = () => {
+const MyNavbar = ({ onLogout }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
-  const [isAdminOrModerator, setIsAdminOrModerator] = useState(false); 
+  const [isAdminOrModerator, setIsAdminOrModerator] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,8 +15,7 @@ const MyNavbar = () => {
       setIsLoggedIn(true);
       setUserName(user.username);
 
-      const roles = user.roles; 
-      console.log(roles);
+      const roles = user.roles;
       if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_MODERATOR')) {
         setIsAdminOrModerator(true);
       } else {
@@ -30,10 +29,10 @@ const MyNavbar = () => {
   }, []);
 
   const handleLogout = () => {
-    authService.logout();
+    onLogout(); // Chama o logout do App que também atualiza o estado de autenticação e redireciona
     setIsLoggedIn(false);
-    setIsAdminOrModerator(false); 
-    navigate('/');
+    setIsAdminOrModerator(false);
+    navigate('/login'); // Redireciona para a página de login após o logout
   };
 
   const handleLogin = () => {
@@ -52,7 +51,6 @@ const MyNavbar = () => {
             <Nav.Link as={Link} to="/zoo">Zoológicos</Nav.Link>
             <Nav.Link as={Link} to="/animais">Animais</Nav.Link>
             {isAdminOrModerator && <Nav.Link as={Link} to="/admin" style={{ color: 'red' }}>Admin</Nav.Link>}
-            {/* <Nav.Link as={Link} to="/contact">Contato</Nav.Link> */}
           </Nav>
           <Nav className="ms-auto">
             {isLoggedIn ? (
