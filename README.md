@@ -1,5 +1,16 @@
 ![Class Diagram](https://github.com/dmioto/zoo/blob/7ba1ff4c73cd0baee50236bf4b0daa490128eda7/Classe%20UML.png)
 
+# How to use it
+
+```bash
+git clone https://github.com/ddmioto/zoo/
+cd zoo
+make
+cd front/zoo-app/
+npm start
+```
+
+
 # Zoo API Documentation
 
 ## Base URL
