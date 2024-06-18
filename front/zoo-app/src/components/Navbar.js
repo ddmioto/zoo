@@ -29,10 +29,10 @@ const MyNavbar = ({ onLogout }) => {
   }, []);
 
   const handleLogout = () => {
-    onLogout(); // Chama o logout do App que também atualiza o estado de autenticação e redireciona
+    onLogout(); 
     setIsLoggedIn(false);
     setIsAdminOrModerator(false);
-    navigate('/login'); // Redireciona para a página de login após o logout
+    navigate('/login');
   };
 
   const handleLogin = () => {

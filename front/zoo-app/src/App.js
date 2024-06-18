@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Animals from './pages/animals/animals';
 import Zoo from './pages/zoo/zoo';
 import authService from './pages/auth/services/auth.service';
+import Admin from './pages/admin/admin';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -55,6 +56,7 @@ function App() {
         <Route path="/zoo" element={<ProtectedRoute element={<Zoo />} />} />
         <Route path="/animais" element={<ProtectedRoute element={<Animals />} />} />
         <Route path="/login" element={<LoginRoute element={<Auth onLoginSuccess={handleLoginSuccess} />} />} />
+        <Route path="/admin" element={<ProtectedRoute element={<Admin />} />} />
       </Routes>
     </div>
   );

@@ -1,8 +1,6 @@
-// src/services/auth.service.js
-
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/auth'; // Substitua pela URL do seu backend
+const API_URL = 'http://localhost:8080/api/auth';
 
 class AuthService {
   async login(username, password) {
