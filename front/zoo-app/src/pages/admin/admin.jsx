@@ -1,52 +1,76 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Container, Row, Col, Pagination } from 'react-bootstrap';
+import axios from 'axios';
+import authService from '../auth/services/auth.service';
 
-const mockAnimals = [
-  { id: 1, name: 'Elefante' },
-  { id: 2, name: 'Leão' },
-  { id: 3, name: 'Girafa' },
-  { id: 4, name: 'Zebra' },
-  { id: 5, name: 'Pinguim' },
-  { id: 6, name: 'Canguru' },
-  { id: 7, name: 'Cobra' },
-  { id: 8, name: 'Papagaio' },
-  { id: 9, name: 'Tigre' },
-  { id: 10, name: 'Rinoceronte' },
-  { id: 11, name: 'Urso' },
-  { id: 12, name: 'Gorila' }
-];
+const API_URL = 'http://localhost:8080/api';
 
 const Admin = () => {
   const [name, setName] = useState('');
   const [cnpj, setCnpj] = useState('');
-  const [address, setAddress] = useState({ street: '', city: '', state: '', zip: '' });
+  const [address, setAddress] = useState({ street: '', number: '', city: '', state: '', cep: '' });
   const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [animalsPage, setAnimalsPage] = useState({ content: [], totalPages: 0, totalElements: 0 });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
+  const [token, setToken] = useState(""); 
 
-  const totalPages = Math.ceil(mockAnimals.length / itemsPerPage);
-  const currentAnimals = mockAnimals.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+    setToken(currentUser.accessToken);
+    console.log(currentUser);
+    fetchAnimals(currentPage, itemsPerPage);
+  }, [currentPage]);
 
-  const handleAnimalSelection = (animal) => {
+  const fetchAnimals = async (page, size, sortBy = 'name', direction = 'asc') => {
+    try {
+      const currentUser = authService.getCurrentUser();
+      const response = await axios.get(`${API_URL}/animals/all?page=${page - 1}&size=${size}&sortBy=${sortBy}&direction=${direction}`, {
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`
+        }
+      });
+      console.log(response.data);
+      setAnimalsPage(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar animais:', error);
+    }
+  };
+
+  const handleAnimalSelection = (animalId) => {
     setSelectedAnimals((prevSelected) => {
-      if (prevSelected.includes(animal)) {
-        return prevSelected.filter((a) => a !== animal);
+      if (prevSelected.includes(animalId)) {
+        return prevSelected.filter((id) => id !== animalId);
       } else {
-        return [...prevSelected, animal];
+        return [...prevSelected, animalId];
       }
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newZoo = {
       name,
       cnpj,
       address,
-      animals: selectedAnimals,
+      animalIds: selectedAnimals,
     };
-    console.log('Zoológico criado:', newZoo);
-    alert('Zoológico criado com sucesso!');
+
+    try {
+      await axios.post(`${API_URL}/zoo/add`, newZoo, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      alert('Zoológico criado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao criar zoológico:', error);
+      alert('Erro ao criar zoológico');
+    }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -85,6 +109,12 @@ const Admin = () => {
               />
               <Form.Control
                 type="text"
+                placeholder="Número"
+                value={address.number}
+                onChange={(e) => setAddress({ ...address, number: e.target.value })}
+              />
+              <Form.Control
+                type="text"
                 placeholder="Cidade"
                 value={address.city}
                 onChange={(e) => setAddress({ ...address, city: e.target.value })}
@@ -112,28 +142,34 @@ const Admin = () => {
         <Col md={6}>
           <h2>Selecionar Animais</h2>
           <div>
-            {currentAnimals.map((animal) => (
+            {animalsPage.content.map((animal) => (
               <Form.Check
                 type="checkbox"
                 label={animal.name}
                 key={animal.id}
-                checked={selectedAnimals.includes(animal)}
-                onChange={() => handleAnimalSelection(animal)}
+                checked={selectedAnimals.includes(animal.id)}
+                onChange={() => handleAnimalSelection(animal.id)}
               />
             ))}
           </div>
           <Pagination>
-            <Pagination.Prev onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} />
-            {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Prev
+              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+              disabled={currentPage === 1}
+            />
+            {Array.from({ length: animalsPage.totalPages }, (_, index) => (
               <Pagination.Item
                 key={index + 1}
                 active={index + 1 === currentPage}
-                onClick={() => setCurrentPage(index + 1)}
+                onClick={() => handlePageChange(index + 1)}
               >
                 {index + 1}
               </Pagination.Item>
             ))}
-            <Pagination.Next onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))} />
+            <Pagination.Next
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, animalsPage.totalPages))}
+              disabled={currentPage === animalsPage.totalPages}
+            />
           </Pagination>
         </Col>
       </Row>
