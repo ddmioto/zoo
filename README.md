@@ -7,6 +7,16 @@ https://localhost:8080/api
 
 ## Endpoints
 
+POST /auth/signup
+POST /auth/signin
+POST /zoo/add
+GET  /zoo/all
+GET  /animal/{name}
+GET  /animals/all?page=0&size=10&sortBy=name&direction=ASC
+POST /animals/add
+
+
+
 ### POST /auth/signup
 
 #### Description
@@ -452,7 +462,7 @@ curl --request GET \
 
 ---
 
-### Post /animals/add
+### POST /animals/add
 
 #### Description
 Add a list of animals
